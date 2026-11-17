@@ -1,12 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meu Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0e1b32" />
+  <meta name="description" content="Dashboard demonstrativo de carteira de crédito e risco de inadimplência." />
+  <title>Pulse Credit | Dashboard de Risco</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-    <h1>Meu primeiro GitHub Pages</h1>
-    <p>Dashboard publicado com sucesso!</p>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-symbol">◈</span><span>pulse<span class="brand-accent">credit</span><small>ANALYTICS</small></span></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav aria-label="Navegação principal">
+        <a href="#overview" class="nav-link active"><span class="nav-icon">▦</span> Visão geral</a>
+        <a href="#performance" class="nav-link"><span class="nav-icon">▥</span> Performance</a>
+        <a href="#portfolio" class="nav-link"><span class="nav-icon">☷</span> Carteira de crédito</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="live-dot"></span> Ambiente de demonstração<br><small>Dados 100% simulados</small></div>
+        <div class="profile"><div class="avatar">PC</div><div><strong>Analytics Workspace</strong><small>GitHub Pages</small></div></div>
+      </div>
+    </aside>
+
+    <main class="main" id="overview">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" type="button" aria-label="Abrir menu">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong>Visão geral</strong></div>
+        <div class="top-actions"><span class="system-status"><i></i> Dados simulados</span><span class="date-pill" id="todayLabel"></span></div>
+      </header>
+
+      <div class="content">
+        <section class="page-header">
+          <div><div class="eyebrow">DASHBOARD EXECUTIVO <span class="eyebrow-line"></span> CRÉDITO & RISCO</div><h1>Visão geral da carteira<span class="title-dot">.</span></h1><p>Acompanhe indicadores de exposição, inadimplência e perfil de risco.</p></div>
+          <button class="export-button" id="exportButton" type="button"><span>↓</span> Exportar CSV</button>
+        </section>
+
+        <section class="filter-bar" aria-label="Filtros do dashboard">
+          <div class="filter-heading"><span class="filter-icon">☷</span> Filtros</div>
+          <label>Período<select id="periodFilter"><option value="12">Últimos 12 meses</option><option value="6">Últimos 6 meses</option><option value="3">Últimos 3 meses</option></select></label>
+          <label>Segmento<select id="segmentFilter"><option value="Todos">Todos os segmentos</option><option value="Varejo">Varejo</option><option value="Uniclass">Uniclass</option><option value="Personnalité">Personnalité</option></select></label>
+          <label>Região<select id="regionFilter"><option value="Todas">Todas as regiões</option><option value="Sudeste">Sudeste</option><option value="Sul">Sul</option><option value="Nordeste">Nordeste</option><option value="Centro-Oeste">Centro-Oeste</option><option value="Norte">Norte</option></select></label>
+          <button class="reset-button" id="resetButton" type="button">↺ Limpar</button>
+        </section>
+
+        <section class="kpi-grid" aria-label="Indicadores principais">
+          <article class="kpi"><div class="kpi-top"><span>Carteira ativa</span><span class="kpi-icon indigo">▤</span></div><div class="kpi-value" id="kpiPortfolio">—</div><div class="kpi-bottom"><span class="kpi-tag purple" id="portfolioChange">—</span><span>vs. período anterior</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>Clientes ativos</span><span class="kpi-icon blue">♙</span></div><div class="kpi-value" id="kpiClients">—</div><div class="kpi-bottom"><span class="kpi-tag blue-tag" id="clientsChange">—</span><span>vs. período anterior</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>Taxa de inadimplência</span><span class="kpi-icon amber">⚑</span></div><div class="kpi-value" id="kpiDefault">—</div><div class="kpi-bottom"><span class="kpi-tag" id="defaultChange">—</span><span>vs. período anterior</span></div></article>
+          <article class="kpi"><div class="kpi-top"><span>Score médio de crédito</span><span class="kpi-icon green">◎</span></div><div class="kpi-value" id="kpiScore">—</div><div class="kpi-bottom"><span class="kpi-tag green-tag" id="scoreChange">—</span><span>vs. período anterior</span></div></article>
+        </section>
+
+        <section class="charts-grid" id="performance">
+          <article class="panel chart-wide"><div class="panel-heading"><div><span class="section-marker"></span><h2>Evolução da inadimplência</h2><p>Percentual de contratos com atraso superior a 90 dias</p></div><span class="chart-legend"><i></i> Inadimplência</span></div><div class="chart-container"><canvas id="trendChart" aria-label="Evolução mensal da inadimplência" role="img"></canvas></div></article>
+          <article class="panel"><div class="panel-heading"><div><span class="section-marker"></span><h2>Distribuição de risco</h2><p>Faixas de score dos clientes</p></div></div><div class="risk-layout"><div class="donut-wrapper"><canvas id="riskChart" aria-label="Clientes por faixa de risco" role="img"></canvas><div class="donut-center"><strong id="donutTotal">—</strong><span>clientes</span></div></div><div class="risk-legend" id="riskLegend"></div></div></article>
+          <article class="panel"><div class="panel-heading"><div><span class="section-marker"></span><h2>Carteira por segmento</h2><p>Saldo em milhões de reais</p></div></div><div class="chart-container small"><canvas id="segmentChart" aria-label="Saldo da carteira por segmento" role="img"></canvas></div></article>
+          <article class="panel insights-panel"><div class="panel-heading"><div><span class="section-marker"></span><h2>Insights da carteira</h2><p>Resumo automático dos filtros aplicados</p></div></div><div class="insights-list" id="insightsList"></div></article>
+        </section>
+
+        <section class="panel table-panel" id="portfolio"><div class="table-header"><div><span class="section-marker"></span><h2>Detalhamento de contratos</h2><p>Uma amostra de contratos no período selecionado</p></div><div class="table-tools"><input type="search" id="searchInput" placeholder="Buscar por contrato..." aria-label="Buscar contrato" /><span class="results-pill" id="tableCount"></span></div></div><div class="table-scroll"><table><thead><tr><th>CONTRATO</th><th>SEGMENTO</th><th>REGIÃO</th><th>SALDO</th><th>SCORE</th><th>STATUS</th></tr></thead><tbody id="portfolioTable"></tbody></table></div><div class="table-footer"><span id="tableFootnote">—</span><div class="pagination"><button type="button" id="prevPage" aria-label="Página anterior">‹</button><span id="pageInfo"></span><button type="button" id="nextPage" aria-label="Próxima página">›</button></div></div></section>
+        <footer>Pulse Credit Analytics <span>•</span> Projeto demonstrativo com dados fictícios <span>•</span> HTML + CSS + JavaScript</footer>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
